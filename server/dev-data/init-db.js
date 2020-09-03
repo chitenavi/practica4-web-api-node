@@ -6,12 +6,12 @@ import Advert from '../models/advertModel';
 dotenv.config();
 
 // Remote Database
-const DB = process.env.DATABASE.replace(
+/* const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
-);
+); */
 
-// const DB = process.env.DATABASE_LOCAL; // Local Database
+const DB = process.env.DATABASE_LOCAL || 'mongodb://localhost:27017/nodepop'; // Local Database
 
 mongoose
   .connect(DB, {
@@ -25,7 +25,7 @@ mongoose
 // READ JSON FILE
 const adverts = JSON.parse(fs.readFileSync('./data/adverts.json', 'utf-8'));
 
-// DELETE ALL DATA AND LOAD ALL TO DB
+// DELETE ALL DATA AND RELOAD TO DB
 const initDB = async () => {
   try {
     await Advert.deleteMany();
