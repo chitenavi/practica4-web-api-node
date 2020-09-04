@@ -7,6 +7,7 @@ import logger from 'morgan';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
+import advertsRouter from './routes/api/advertRoutes';
 
 const app = express();
 
@@ -21,8 +22,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Middleware for catch request date
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
+/**
+ * Website routes
+ */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+/**
+ * API routes
+ */
+app.use('/api/v1/adverts', advertsRouter); // adverts
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
