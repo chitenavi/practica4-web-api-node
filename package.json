@@ -10,11 +10,12 @@
     "start": "npm run prod",
     "build": "npm-run-all clean transpile",
     "server": "node ./dist-server/bin/www",
-    "dev": "DEBUG=test-node:* npm-run-all build server",
+    "dev": "NODE_ENV=deveploment DEBUG=practica4-web-api-node:* npm-run-all build server",
     "prod": "NODE_ENV=production npm-run-all build server",
     "transpile": "babel ./server --out-dir dist-server",
     "clean": "rimraf dist-server",
-    "initdb": "node ./dist-server/dev-data/install-db"
+    "initdb": "npm-run-all build resetdb",
+    "resetdb": "node ./dist-server/dev-data/init-db"
   },
   "babel": {
     "presets": [
