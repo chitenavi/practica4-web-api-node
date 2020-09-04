@@ -14,7 +14,17 @@
   justify-content: space-between;
   text-align: center;
 }
+.title {
+  font-family: 'Courgette', cursive;
+  color: var(--color-secundario);
+  font-size: 3rem;
+  margin-left: 1rem;
+}
 
+.navbar button {
+  margin-right: 1rem;
+  margin-top: 0;
+}
 .logo img {
   height: calc(var(--nav-height) - 1rem);
 }
@@ -32,7 +42,7 @@
   border-radius: 1rem;
   font-size: 1.4rem;
   margin-right: 0.5rem;
-  width: 30%;
+  width: 50%;
 }
 .search-nav label {
   font-size: 1.7rem;

@@ -18,15 +18,21 @@ filterForm.addEventListener('submit', async event => {
   }
   formData.delete('minPrice');
   formData.delete('maxPrice');
-  console.log(formData.price);
+  if (formData.get('sale') === 'both') {
+    formData.delete('sale');
+  }
 
   const queryString = new URLSearchParams(formData).toString();
-  console.log(queryString);
 
+  /* GET adverts from API usin fetch */
+  /*
   const response = await fetch(
     `http://localhost:3000/api/v1/adverts?${queryString}`
   );
   const dataRes = await response.json();
-
   console.log(dataRes.data.adverts);
+  */
+
+  /* Redirect with filter query string */
+  document.location.href = `${document.location.origin}?${queryString}`;
 });

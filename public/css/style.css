@@ -2,12 +2,12 @@
 
 :root {
   --max-width: 1200px;
-  --nav-height: 120px;
+  --nav-height: 100px;
   --color-primario: #8dc973;
   --color-secundario: #f78f1e;
   --color-terciario: #e55226;
-  --color-navbar: rgba(165, 28, 48, 0.4);
   --bg-color: #333333;
+  --bg-color-sec: #2e2e2e;
 }
 
 .body {
@@ -19,11 +19,6 @@
   background-color: var(--bg-color);
 }
 
-.title {
-  font-family: 'Courgette', cursive;
-  font-size: 8vw;
-  color: var(--color-secundario);
-}
 .main {
   max-width: var(--max-width);
   align-self: center;
@@ -33,21 +28,27 @@
 
 .header {
   margin-top: var(--nav-height);
-  background-color: #2e2e2e;
-  position: relative;
+  background-color: var(--bg-color-sec);
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 2rem;
+  color: lightgray;
 }
 
-.header p {
-  margin-top: 0.5rem;
-  font-size: 1.8rem;
-  font-weight: 300;
-  color: var(--color-primario);
+input[type='number'] {
+  width: 75px;
+}
+
+button {
+  margin-top: 1rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  background-color: #b8db9a;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: var(--color-primario);
 }
 
 .section {
