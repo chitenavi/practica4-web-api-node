@@ -1,0 +1,32 @@
+const filterForm = document.querySelector('.filter');
+
+filterForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const formData = new FormData(filterForm);
+  if (formData.get('tag') === 'all') {
+    formData.delete('tag');
+  }
+  if (!formData.get('start')) {
+    formData.delete('start');
+  }
+  if (!formData.get('limit')) {
+    formData.delete('limit');
+  }
+  if (formData.get('minPrice') || formData.get('maxPrice')) {
+    const price = `${formData.get('minPrice')}-${formData.get('maxPrice')}`;
+    formData.append('price', price);
+  }
+  formData.delete('minPrice');
+  formData.delete('maxPrice');
+  console.log(formData.price);
+
+  const queryString = new URLSearchParams(formData).toString();
+  console.log(queryString);
+
+  const response = await fetch(
+    `http://localhost:3000/api/v1/adverts?${queryString}`
+  );
+  const dataRes = await response.json();
+
+  console.log(dataRes.data.adverts);
+});

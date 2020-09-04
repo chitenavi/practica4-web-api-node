@@ -1,11 +1,81 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
+<%- include('./templates/head.html') -%>
+<body class="body">
+  <!-- Navbar menu -->
+  <%- include('./templates/nav.html') -%>
+
+  <header class="header">
+    <h1 class="title"><%= title %></h1>
+    <p>"Tu web de compraventa"</p>
+  </header>
+
+  <main class="main">
+    <section class="section" id="articles">
+      <h1>Artículos</h1>
+      <form class="filter">
+        <h2>Filtrar</h2>
+        <label for="tag">Tags</label>
+        <select id="tag" name="tag">
+          <option value="all">-Todas las categorías-</option>
+          <option value="lifestyle">Lifestyle</option>
+          <option value="mobile">Mobile</option>
+          <option value="motor">Motor</option>
+          <option value="work">Work</option>
+        </select>
+        <div>
+          <input type="radio" id="advertChoice1" name="sale" value="true" />
+          <label for="advertChoice1">Se Vende</label>
+
+          <input type="radio" id="advertChoice2" name="sale" value="false" />
+          <label for="advertChoice2">Se Compra</label>
+        </div>
+        <label for="sort">Ordenar por:</label>
+        <select id="sort" name="sort">
+          <option value="price">Precio</option>
+          <option value="name">Nombre</option>
+        </select>
+        <div class="price-range">
+          <label for="min-price">Precio mínimo</label>
+          <input
+            type="number"
+            name="minPrice"
+            placeholder="0"
+            id="min-price"
+            min="0"
+          />
+          <label for="max-price">Precio máximo</label>
+          <input
+            type="number"
+            name="maxPrice"
+            placeholder="Sin límite"
+            id="max-price"
+            min="1"
+          />
+        </div>
+        <div class="paginate">
+          <label for="start">Start</label>
+          <input
+            type="number"
+            placeholder="1"
+            name="start"
+            id="start"
+            min="0"
+          />
+          <label for="limit">Limit</label>
+          <input
+            type="number"
+            placeholder="10"
+            name="limit"
+            id="limit"
+            min="0"
+          />
+        </div>
+
+        <button id="button_filter" class="button">Aplicar Filtro</button>
+      </form>
+      <%- include('./templates/advert-cards.html') -%>
+    </section>
+  </main>
+
+  <!-- Footer template -->
+  <%- include('./templates/footer.html') -%>
+</body>
