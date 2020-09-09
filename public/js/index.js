@@ -1,4 +1,5 @@
 const filterForm = document.querySelector('.filter');
+const newAdvButton = document.querySelector('#new-advert');
 
 filterForm.addEventListener('submit', async event => {
   event.preventDefault();
@@ -21,8 +22,11 @@ filterForm.addEventListener('submit', async event => {
   if (formData.get('sale') === 'both') {
     formData.delete('sale');
   }
+  if (formData.get('sort') === 'normal') {
+    formData.delete('sort');
+  }
 
-  const queryString = new URLSearchParams(formData).toString();
+  //const queryString = new URLSearchParams(formData).toString();
 
   /* GET adverts from API usin fetch */
   /*
@@ -34,5 +38,13 @@ filterForm.addEventListener('submit', async event => {
   */
 
   /* Redirect with filter query string */
-  document.location.href = `${document.location.origin}?${queryString}`;
+  document.location = `${document.location.origin}?${new URLSearchParams(
+    formData
+  ).toString()}`;
+});
+
+newAdvButton.addEventListener('click', e => {
+  e.preventDefault();
+
+  document.location = `${document.location.origin}/newadv/`;
 });
