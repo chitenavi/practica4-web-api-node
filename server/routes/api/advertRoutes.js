@@ -1,19 +1,31 @@
-import express from 'express';
+/**
+ * API routes
+ */
 
-import {
+const express = require('express');
+
+const { advertValidationRules, validate } = require('../../utils/validators');
+const uploadAdvImg = require('../../controllers/uploadController');
+
+const {
   getAllAdverts,
   getAllExistTags,
   createAdvert,
   getAdvertById,
   updateAdvertById,
   deleteAdvertById,
-} from '../../controllers/advertController';
+} = require('../../controllers/advertController');
+
+// import functions from controller
 
 const router = express.Router();
 
 /* GET /api/v1/adverts */
 /* POST /api/v1/adverts */
-router.route('/').get(getAllAdverts).post(createAdvert);
+router
+  .route('/')
+  .get(getAllAdverts)
+  .post(uploadAdvImg, advertValidationRules(), validate, createAdvert);
 
 /* GET /api/v1/adverts/tags */
 router.route('/tags').get(getAllExistTags);
@@ -27,4 +39,4 @@ router
   .patch(updateAdvertById)
   .delete(deleteAdvertById);
 
-export default router;
+module.exports = router;

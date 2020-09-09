@@ -1,12 +1,12 @@
-import Advert from '../models/advertModel';
-import APIFeatures from '../utils/apiFeatures';
+const Advert = require('../models/advertModel');
+const APIFeatures = require('../utils/apiFeatures');
 
-export const getAllAdverts = async (req, res, next) => {
+const getAllAdverts = async (req, res, next) => {
   try {
     const features = new APIFeatures(Advert.find(), req.query)
       .filter()
-      .limitFields()
       .sort()
+      .limitFields()
       .paginate();
     const adverts = await features.query;
 
@@ -20,15 +20,12 @@ export const getAllAdverts = async (req, res, next) => {
       },
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-    // next(err);
+    err.status = 404;
+    next(err);
   }
 };
 
-export const getAllExistTags = async (req, res, next) => {
+const getAllExistTags = async (req, res, next) => {
   try {
     const existTags = await Advert.distinct('tags');
 
@@ -40,14 +37,12 @@ export const getAllExistTags = async (req, res, next) => {
       },
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
+    err.status = 404;
+    next(err);
   }
 };
 
-export const getAdvertById = async (req, res, next) => {
+const getAdvertById = async (req, res, next) => {
   try {
     const advert = await Advert.findById(req.params.id);
 
@@ -58,16 +53,26 @@ export const getAdvertById = async (req, res, next) => {
       },
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
+    err.status = 404;
+    next(err);
   }
 };
 
-export const createAdvert = async (req, res, next) => {
+const createAdvert = async (req, res, next) => {
   try {
+    // console.log(req.body);
+    // console.log(req.file);
+
+    req.body.tinyDescription = `${req.body.description.substring(0, 40)}...`;
+
+    req.body.tags = req.body.tags.split(',');
+
+    if (req.file) {
+      req.body.image = req.file.filename;
+    }
+
     const newAdvert = await Advert.create(req.body);
+
     res.status(201).json({
       status: 'success',
       data: {
@@ -75,14 +80,11 @@ export const createAdvert = async (req, res, next) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+    next(err);
   }
 };
 
-export const updateAdvertById = async (req, res, next) => {
+const updateAdvertById = async (req, res, next) => {
   try {
     const advert = await Advert.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -96,14 +98,12 @@ export const updateAdvertById = async (req, res, next) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+    err.status = 400;
+    next(err);
   }
 };
 
-export const deleteAdvertById = async (req, res, next) => {
+const deleteAdvertById = async (req, res, next) => {
   try {
     await Advert.findByIdAndRemove(req.params.id);
 
@@ -112,14 +112,12 @@ export const deleteAdvertById = async (req, res, next) => {
       data: null,
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
+    err.status = 400;
+    next(err);
   }
 };
 
-export default {
+module.exports = {
   getAllAdverts,
   getAllExistTags,
   createAdvert,

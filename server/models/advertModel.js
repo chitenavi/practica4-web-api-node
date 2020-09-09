@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const advertSchema = new mongoose.Schema({
   name: {
@@ -41,4 +41,4 @@ const advertSchema = new mongoose.Schema({
 
 const Advert = mongoose.model('Advert', advertSchema);
 
-export default Advert;
+module.exports = Advert;

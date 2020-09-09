@@ -5,53 +5,72 @@ class APIFeatures {
   }
 
   filter() {
-    // 1A) Filtering
-    const queryObj = { ...this.queryString };
-    const excludedFields = ['start', 'sort', 'limit', 'fields'];
-    excludedFields.forEach(el => delete queryObj[el]);
-    //console.log(queryObj);
+    // Obtain query object from query string
+    const filterObj = { ...this.queryString };
 
-    // Apply price range filter if exists
-    if (queryObj.price && queryObj.price.includes('-')) {
-      if (queryObj.price[0] === '-') {
-        queryObj.price = { $lte: `${queryObj.price.replace('-', '')}` };
-      } else if (queryObj.price[queryObj.price.length - 1] === '-') {
-        queryObj.price = { $gte: `${queryObj.price.replace('-', '')}` };
+    // Delete properties that not use for filter
+    const excludedFields = ['start', 'sort', 'limit', 'fields'];
+    excludedFields.forEach(el => delete filterObj[el]);
+
+    // Apply price range filter if exists, supose the string is
+    // in right format
+    // ?price=10-50
+    if (filterObj.price && filterObj.price.includes('-')) {
+      if (filterObj.price[0] === '-') {
+        // (?price=-50) Filter by price <= 50
+        filterObj.price = {
+          $lte: parseInt(filterObj.price.replace('-', ''), 10),
+        };
+      } else if (filterObj.price[filterObj.price.length - 1] === '-') {
+        // (?price=50-) Filter by price >= 50
+        filterObj.price = {
+          $gte: parseInt(filterObj.price.replace('-', ''), 10),
+        };
       } else {
-        queryObj.price = {
-          $gte: `${queryObj.price.substring(0, queryObj.price.indexOf('-'))}`,
-          $lte: `${queryObj.price.substring(
-            queryObj.price.indexOf('-') + 1,
-            queryObj.price.length
-          )}`,
+        // (?price=50-100) Filter by 50 <= price <=100
+        filterObj.price = {
+          $gte: parseInt(
+            filterObj.price.substring(0, filterObj.price.indexOf('-')),
+            10
+          ),
+          $lte: parseInt(
+            filterObj.price.substring(
+              filterObj.price.indexOf('-') + 1,
+              filterObj.price.length
+            ),
+            10
+          ),
         };
       }
     }
 
-    if (queryObj.name) {
-      queryObj.name = { $regex: `^${queryObj.name}`, $options: 'i' };
+    // Apply filter name, use regular expression from mongodb
+    if (filterObj.name) {
+      filterObj.name = { $regex: `^${filterObj.name}`, $options: 'i' };
     }
 
-    if (queryObj.tag === 'all') {
-      delete queryObj.tag;
+    // If there is a "tag" in queryString (?tag=mobile),
+    // replace it with tags (?tags=mobile) to match with model
+    if (filterObj.tag) {
+      filterObj.tags = filterObj.tag;
+      delete filterObj.tag;
     }
 
-    let queryStr = JSON.stringify(queryObj);
-
-    queryStr = queryStr.replace('tag', 'tags');
-    //console.log(queryStr);
-    this.query = this.query.find(JSON.parse(queryStr));
+    this.query = this.query.find(filterObj);
 
     return this;
   }
 
   sort() {
     if (this.queryString.sort) {
+      // Order by one ore more keys separated by commas,
+      // replace commas with spaces, sort('name price')
       const sortBy = this.queryString.sort.split(',').join(' ');
-      this.query = this.query.sort(sortBy);
-      // sort('price name')
+
+      // Order with case insensitive
+      this.query = this.query.collation({ locale: 'es' }).sort(sortBy);
     } else {
-      // if no sort in query, then we apply sort by create date
+      // if no sort, then we apply sort by create date by default
       this.query = this.query.sort('createdAt');
     }
 
@@ -60,10 +79,11 @@ class APIFeatures {
 
   limitFields() {
     if (this.queryString.fields) {
+      // return only the desired fields
       const fields = this.queryString.fields.split(',').join(' ');
       this.query = this.query.select(fields);
     } else {
-      // return everything except __v field, use by moongose
+      // by default, return everything except __v field, use by moongose
       this.query = this.query.select('-__v');
     }
 
@@ -72,14 +92,14 @@ class APIFeatures {
 
   paginate() {
     const start = this.queryString.start * 1 || 1;
-    const limit = this.queryString.limit * 1 || 100;
+    const limit = this.queryString.limit * 1 || 10;
     const skip = (start - 1) * limit;
 
-    // page=2&limit=10, 1-10, page 1, 11-20, page 2 ...
+    // start=1&limit=10, 1-10, page 1, 11-20, page 2 ...
     this.query = this.query.skip(skip).limit(limit);
 
     return this;
   }
 }
 
-export default APIFeatures;
+module.exports = APIFeatures;

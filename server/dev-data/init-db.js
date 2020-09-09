@@ -1,7 +1,7 @@
-import readline from 'readline';
-import fs from 'fs';
-import conn from '../utils/connectMoonDB';
-import Advert from '../models/advertModel';
+const readline = require('readline');
+const fs = require('fs');
+const conn = require('../utils/connectMoonDB');
+const Advert = require('../models/advertModel');
 
 // Read JSON file with init adverts
 const adverts = JSON.parse(fs.readFileSync('./data/adverts.json', 'utf-8'));

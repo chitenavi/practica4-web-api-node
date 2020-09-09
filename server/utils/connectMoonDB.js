@@ -1,8 +1,7 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-
-// Config enviroment variables with .env file using dotenv, must be at root project directory
-dotenv.config();
+// Config enviroment variables with .env file using dotenv,
+// must be at root project directory
+require('dotenv').config();
+const mongoose = require('mongoose');
 
 // Remote Database, use Atlas
 /* const DB = process.env.DATABASE.replace(
@@ -31,4 +30,4 @@ mongoose.connect(DB, {
   useUnifiedTopology: true,
 });
 
-export default mongoose.connection;
+module.exports = mongoose.connection;
