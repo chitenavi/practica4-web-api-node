@@ -3,16 +3,12 @@
 /**
  * Module dependencies.
  */
+require('dotenv').config();
 
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import debugLib from 'debug';
-import http from 'http';
-import app from '../app';
-
-dotenv.config();
-
-const debug = debugLib('practica4-web-api-node:server');
+const mongoose = require('mongoose');
+const debug = require('debug')('practica4-web-api-node:server');
+const http = require('http');
+const app = require('../app');
 
 // Remote database
 /* const DB = process.env.DATABASE.replace(

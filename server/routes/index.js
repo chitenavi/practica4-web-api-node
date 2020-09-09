@@ -1,35 +1,29 @@
-import express from 'express';
+const express = require('express');
 
-import Advert from '../models/advertModel';
-import APIFeatures from '../utils/apiFeatures';
+const { advertValidationRules, validate } = require('../utils/validators');
+
+const uploadAdvImg = require('../controllers/uploadController');
+
+const {
+  getHomePage,
+  getDetailAdvPage,
+  getNewAdvPage,
+  createNewAdv,
+} = require('../controllers/indexController');
 
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', async (req, res, next) => {
-  try {
-    const features = new APIFeatures(Advert.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const adverts = await features.query;
-
-    res.render('index', { title: 'Nodepop', adverts });
-  } catch (err) {
-    next(err);
-  }
-});
+router.route('/').get(getHomePage);
 
 /* GET detail product page. */
-router.get('/adverts/:id', async (req, res, next) => {
-  // EXECUTE QUERY
-  try {
-    const advert = await Advert.findById(req.params.id);
-    res.render('advertdetail', { title: advert.name, advert });
-  } catch (err) {
-    next(err);
-  }
-});
+router.route('/adverts/:id').get(getDetailAdvPage);
+
+/* GET new product page. */
+/* POST create new product, redirect to home. */
+router
+  .route('/newadv/')
+  .get(getNewAdvPage)
+  .post(uploadAdvImg, advertValidationRules(), validate, createNewAdv);
 
 module.exports = router;
