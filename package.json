@@ -8,22 +8,10 @@
   "scripts": {
     "watch:dev": "nodemon",
     "start": "npm run prod",
-    "build": "npm-run-all clean transpile",
-    "server": "node ./dist-server/bin/www",
-    "dev": "NODE_ENV=deveploment DEBUG=practica4-web-api-node:* npm-run-all build server",
-    "prod": "NODE_ENV=production npm-run-all build server",
-    "transpile": "babel ./server --out-dir dist-server",
-    "clean": "rimraf dist-server",
-    "initdb": "npm-run-all build resetdb",
-    "resetdb": "node ./dist-server/dev-data/init-db"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ],
-    "plugins": [
-      "@babel/plugin-transform-runtime"
-    ]
+    "server": "node ./server/bin/www",
+    "dev": "cross-env NODE_ENV=development DEBUG=practica4-web-api-node:* npm run server",
+    "prod": "cross-env NODE_ENV=production npm run server",
+    "initdb": "node ./server/dev-data/init-db"
   },
   "nodemonConfig": {
     "exec": "npm run dev",
@@ -38,23 +26,18 @@
     ]
   },
   "dependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.1",
-    "@babel/plugin-transform-runtime": "^7.11.0",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/runtime": "^7.11.2",
     "cookie-parser": "~1.4.4",
+    "cross-env": "^7.0.2",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "~4.16.1",
+    "express-validator": "^6.6.1",
     "http-errors": "^1.8.0",
     "mongoose": "^5.10.0",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.4",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^3.0.2",
-    "transform-runtime": "0.0.0"
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.4"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
