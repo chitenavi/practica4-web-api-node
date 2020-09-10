@@ -11,13 +11,20 @@
 </p>
 
 > API developed under Node and MongoDB of a service for buying and selling second-hand products. The service maintains advertisements, where you can control them using methods described in the documentation.
+>
 > The app deploys a front-end home page, where you can view an example sale web and also the API documentation
+>
+> Everything is generated using the express-generator module, with some changes in the file structure under the MVC architecture.
 
 ### 🏠 [Homepage](http://localhost:3000/ 'Default')
 
 ## Prerequisites
 
 - node >=10.22.0
+
+## API Documentation
+
+You can see all the API documentation at http://localhost:3000/apidoc/ (default path) when you start the application.
 
 ## Install
 
@@ -53,7 +60,7 @@ npm run start
 
 ## Development start
 
-Start the application in development mode, use nodemon to monitor changes in the code:
+Start the application in development mode, use _nodemon_ to monitor changes in the code:
 
 ```sh
 npm run watch:dev
@@ -64,10 +71,6 @@ npm run watch:dev
 ```sh
 ./bin/mongod --dbpath ./data/db --directoryperdb
 ```
-
-## API Documentation
-
-You can see all the API documentation at http://localhost:3000/apidoc/ (default path) when you start the application.
 
 ## Author
 
