@@ -43,23 +43,29 @@ const getNewAdvPage = async (req, res, next) => {
 
 const createNewAdv = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log(req.file);
+    // console.log(req.body);
+    // console.log(req.file);
 
-    req.body.tinyDescription = `${req.body.description.substring(0, 40)}...`;
+    // Make a short description if there is
+    if (req.body.description) {
+      req.body.tinyDescription = `${req.body.description.substring(0, 40)}...`;
+    }
 
-    req.body.tags = req.body.tags.split(',');
+    // Make array tags from input text file front-end, each tag separate by comma (work,mobile,...)
+    if (req.body.tags) {
+      req.body.tags = req.body.tags.split(',');
+    }
 
     if (req.file) {
       req.body.image = req.file.filename;
     }
 
-    const newAdvert = await Advert.create(req.body);
+    await Advert.create(req.body);
 
-    console.log(newAdvert);
+    // console.log(newAdvert);
     res.status(201).redirect('/');
   } catch (err) {
-    err.status = 400;
+    err.status = 422;
     next(err);
   }
 };

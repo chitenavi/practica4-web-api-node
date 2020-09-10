@@ -47,6 +47,7 @@ app.use((err, req, res, next) => {
 
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  // Errors comming from express-validator module
   if (err.array) {
     // si err tiene un array, entonces error de validacion
     err.status = 422;
@@ -56,8 +57,8 @@ app.use((err, req, res, next) => {
     });
   }
 
+  // Api request, response json format
   if (req.originalUrl.startsWith('/api/v1/')) {
-    // Api request
     res.status(err.status).json({
       status: 'fail',
       code: err.status,
@@ -66,7 +67,7 @@ app.use((err, req, res, next) => {
     return;
   }
 
-  // render the error page
+  // render the error page, browsers
   res.status(err.status || 500);
   res.render('error');
 });

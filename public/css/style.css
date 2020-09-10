@@ -38,15 +38,16 @@ input[type='number'] {
   width: 75px;
 }
 
-button {
-  margin-top: 1rem;
+.button {
   border: none;
+  color: black;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   background-color: #b8db9a;
+  font-family: 'Quicksand', Arial, Helvetica, sans-serif;
 }
 
-button:hover {
+.button:hover {
   cursor: pointer;
   background-color: var(--color-primario);
 }

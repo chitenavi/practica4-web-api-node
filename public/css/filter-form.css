@@ -18,3 +18,7 @@
   text-align: center;
   margin-bottom: 0.5rem;
 }
+
+.filter button {
+  margin-top: 1rem;
+}

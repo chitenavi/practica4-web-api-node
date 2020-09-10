@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { check, validationResult } = require('express-validator/check');
 
 const advertValidationRules = function () {
@@ -18,7 +19,11 @@ const validate = function (req, res, next) {
   const extractedErrors = [];
   errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
 
-  //console.log(errors);
+  // Before throw errors, delete upload file if exits
+  if (req.file) {
+    fs.unlinkSync(req.file.path);
+    // console.log('Image deleted!');
+  }
   return errors.throw();
 };
 

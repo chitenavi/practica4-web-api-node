@@ -21,9 +21,20 @@
   margin-left: 1rem;
 }
 
-.navbar button {
+.apidoc-btn {
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+
+  background-color: var(--color-secundario);
+}
+
+.apidoc-btn:hover {
+  cursor: pointer;
+  background-color: var(--color-terciario);
+}
+.navbar a {
   margin-right: 1rem;
-  margin-top: 0;
 }
 .logo img {
   height: calc(var(--nav-height) - 1rem);

@@ -1,5 +1,4 @@
 const filterForm = document.querySelector('.filter');
-const newAdvButton = document.querySelector('#new-advert');
 
 filterForm.addEventListener('submit', async event => {
   event.preventDefault();
@@ -41,10 +40,4 @@ filterForm.addEventListener('submit', async event => {
   document.location = `${document.location.origin}?${new URLSearchParams(
     formData
   ).toString()}`;
-});
-
-newAdvButton.addEventListener('click', e => {
-  e.preventDefault();
-
-  document.location = `${document.location.origin}/newadv/`;
 });

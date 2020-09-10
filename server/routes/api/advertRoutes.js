@@ -7,6 +7,7 @@ const express = require('express');
 const { advertValidationRules, validate } = require('../../utils/validators');
 const uploadAdvImg = require('../../controllers/uploadController');
 
+// import functions from controller
 const {
   getAllAdverts,
   getAllExistTags,
@@ -15,8 +16,6 @@ const {
   updateAdvertById,
   deleteAdvertById,
 } = require('../../controllers/advertController');
-
-// import functions from controller
 
 const router = express.Router();
 
@@ -31,12 +30,12 @@ router
 router.route('/tags').get(getAllExistTags);
 
 /* GET /api/v1/adverts/id */
-/* PATCH /api/v1/adverts/id */
+/* PUT /api/v1/adverts/id */
 /* DELETE /api/v1/adverts/id */
 router
   .route('/:id')
   .get(getAdvertById)
-  .patch(updateAdvertById)
+  .put(updateAdvertById)
   .delete(deleteAdvertById);
 
 module.exports = router;
