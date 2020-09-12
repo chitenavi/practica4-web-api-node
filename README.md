@@ -12,11 +12,13 @@
 
 > API developed under Node and MongoDB of a service for buying and selling second-hand products. The service maintains advertisements, where you can control them using methods described in the documentation.
 >
-> The app deploys a front-end home page, where you can view an example sale web and also the API documentation
+> The app deploys a front-end home page, where you can view an example sale web and also the API documentation. From here you can search, filter, sort and paginate the ads from form or address bar using parameters described in documentation. It is possible to create an ad aswell.
 >
-> Everything is generated using the express-generator module, with some changes in the file structure under the MVC architecture.
+> Everything is generated using the _express-generator_ module, with some changes in the file structure under the MVC architecture. Rendering views using _ejs_
 
 ### 🏠 [Homepage](http://localhost:3000/ 'Default')
+
+> By default, if you run the app on your computer, home page is http://localhost:3000. You can edit the port number you want.
 
 ## Prerequisites
 
