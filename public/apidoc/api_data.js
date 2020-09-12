@@ -3,7 +3,9 @@ define({ "api": [
     "type": "delete",
     "url": "/api/v1/adverts/:id",
     "title": "Delete an advert",
+    "name": "DeleteAdvert",
     "group": "Adverts",
+    "description": "<p>Delete one advert by id param</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -37,74 +39,22 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./server/controllers/advertController.js",
-    "groupTitle": "Adverts",
-    "name": "DeleteApiV1AdvertsId"
-  },
-  {
-    "type": "get",
-    "url": "/api/v1/adverts",
-    "title": "List all adverts",
-    "group": "Adverts",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Status response</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "requestedAt",
-            "description": "<p>Request date/time</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "results",
-            "description": "<p>Number of adverts</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data.adverts",
-            "description": "<p>Adverts's list</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n  \"status\": \"success\",\n  \"requestedAt\": \"2020-09-10T10:55:52.067Z\",\n  \"results\": 8,\n  \"data\": {\n  \"adverts\": [\n       {\n           \"sale\": true,\n           \"tags\": [\n               \"lifestyle\",\n               \"motor\"\n           ],\n           \"_id\": \"5f59fc8f53bab60f7d995367\",\n           \"name\": \"Bicicleta\",\n           \"price\": 230.15,\n           \"tinyDescription\": \"Ut enim ad minim veniam, quis nostrud exercitation ullamco...\",\n           \"description\": \"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\",\n           \"image\": \"bici.jpg\"\n       }, ...\n     ]\n  }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "List error",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": \"fail\",\n  \"code\": 404,\n  \"message\": \"Not Found\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./server/controllers/advertController.js",
-    "groupTitle": "Adverts",
-    "name": "GetApiV1Adverts"
+    "groupTitle": "Adverts"
   },
   {
     "type": "get",
     "url": "/api/v1/adverts/:id",
     "title": "Find an advert",
+    "name": "GetAdvert",
     "group": "Adverts",
+    "description": "<p>Get one advert by id param</p>",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost/api/v1/adverts/5f59fc8f53bab60f7d995367",
+        "type": "json"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -139,6 +89,13 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
+            "field": "data",
+            "description": "<p>Data response</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
             "field": "data.advert",
             "description": "<p>Advert data</p>"
           }
@@ -163,14 +120,27 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./server/controllers/advertController.js",
-    "groupTitle": "Adverts",
-    "name": "GetApiV1AdvertsId"
+    "groupTitle": "Adverts"
   },
   {
     "type": "get",
-    "url": "/api/v1/adverts/tags/",
-    "title": "Find all exist tags",
+    "url": "/api/v1/adverts",
+    "title": "List all adverts",
+    "name": "GetAllAdverts",
     "group": "Adverts",
+    "description": "<p>Get all the ads, and you can filter according to the arguments described</p>",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost/api/v1/adverts",
+        "type": "json"
+      },
+      {
+        "title": "Filter usage:",
+        "content": "By name:\ncurl -i http://localhost/api/v1/adverts?name=ipho\nBy price:\ncurl -i http://localhost/api/v1/adverts?price=100-500\nBy sale (on sale:true or to buy:false):\ncurl -i http://localhost/api/v1/adverts?sale=false\nBy tag:\ncurl -i http://localhost/api/v1/adverts?tags=work,mobile\nSort by price:\ncurl -i http://localhost/api/v1/adverts?sort=price\nLimit obtained fields:\ncurl -i http://localhost/api/v1/adverts?fields=name,price\nPaginate:\ncurl -i http://localhost/api/v1/adverts?start=1&limit=4",
+        "type": "json"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -187,6 +157,88 @@ define({ "api": [
             "optional": false,
             "field": "requestedAt",
             "description": "<p>Request date/time</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "results",
+            "description": "<p>Number of adverts</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Data response</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data.adverts",
+            "description": "<p>Adverts's list</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n  \"status\": \"success\",\n  \"requestedAt\": \"2020-09-10T10:55:52.067Z\",\n  \"results\": 8,\n  \"data\": {\n  \"adverts\": [\n       {\n           \"sale\": true,\n           \"tags\": [\n               \"lifestyle\",\n               \"motor\"\n           ],\n           \"_id\": \"5f59fc8f53bab60f7d995367\",\n           \"name\": \"Bicicleta\",\n           \"price\": 230.15,\n           \"tinyDescription\": \"Ut enim ad minim veniam, quis nostrud exercitation ullamco...\",\n           \"description\": \"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\",\n           \"image\": \"bici.jpg\"\n       }, ...\n     ]\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": \"fail\",\n  \"code\": 404,\n  \"message\": \"Not Found\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./server/controllers/advertController.js",
+    "groupTitle": "Adverts"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/adverts/tags/",
+    "title": "Find all exist tags",
+    "name": "GetAllTags",
+    "group": "Adverts",
+    "description": "<p>Get all exist tags in th DB</p>",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost/api/v1/adverts/tags",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Status response</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "requestedAt",
+            "description": "<p>Request date/time</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Data response</p>"
           },
           {
             "group": "Success 200",
@@ -216,14 +268,15 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./server/controllers/advertController.js",
-    "groupTitle": "Adverts",
-    "name": "GetApiV1AdvertsTags"
+    "groupTitle": "Adverts"
   },
   {
     "type": "post",
     "url": "/api/v1/adverts/",
     "title": "Create an advert",
+    "name": "PostAdvert",
     "group": "Adverts",
+    "description": "<p>Create one advert, content in the body (form-data)</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -300,6 +353,13 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
+            "field": "data",
+            "description": "<p>Data response</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
             "field": "data.advert",
             "description": "<p>Advert data created</p>"
           }
@@ -324,14 +384,15 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./server/controllers/advertController.js",
-    "groupTitle": "Adverts",
-    "name": "PostApiV1Adverts"
+    "groupTitle": "Adverts"
   },
   {
     "type": "put",
     "url": "/api/v1/adverts/:id",
     "title": "Update an advert",
+    "name": "PutAdvert",
     "group": "Adverts",
+    "description": "<p>Update one advert by id param</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -387,6 +448,13 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
+            "field": "data",
+            "description": "<p>Data response</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
             "field": "data.advert",
             "description": "<p>Advert data updated</p>"
           }
@@ -411,7 +479,6 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./server/controllers/advertController.js",
-    "groupTitle": "Adverts",
-    "name": "PutApiV1AdvertsId"
+    "groupTitle": "Adverts"
   }
 ] });
