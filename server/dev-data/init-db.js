@@ -1,41 +1,58 @@
-import fs from 'fs';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Advert from '../models/advertModel';
+const readline = require('readline');
+const fs = require('fs');
+const conn = require('../utils/connectMoonDB');
+const Advert = require('../models/advertModel');
 
-dotenv.config();
-
-// Remote Database
-/* const DB = process.env.DATABASE.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD
-); */
-
-const DB = process.env.DATABASE_LOCAL || 'mongodb://localhost:27017/nodepop'; // Local Database
-
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('DB connection successful!'));
-
-// READ JSON FILE
+// Read JSON file with init adverts
 const adverts = JSON.parse(fs.readFileSync('./data/adverts.json', 'utf-8'));
 
-// DELETE ALL DATA AND RELOAD TO DB
-const initDB = async () => {
+// Delete all data and reload the initial adverts
+const initAdvertsDB = async () => {
   try {
+    console.log('Emptying adverts collection...');
     await Advert.deleteMany();
     console.log('Data successfully deleted!');
+
+    console.log('Loading adverts...');
     await Advert.create(adverts);
-    console.log('Data successfully loaded!');
-    process.exit();
+    console.log(
+      `Data successfully loaded!. ${adverts.length} adverts have been created.`
+    );
   } catch (err) {
-    console.log(err);
+    console.log(`There was an error!: ${err}`);
+    process.exit(1);
   }
 };
 
-initDB();
+function askUser(askText) {
+  return new Promise((resolve, reject) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    rl.question(askText, answer => {
+      rl.close();
+      resolve(answer);
+    });
+  });
+}
+
+conn.once('open', async () => {
+  try {
+    // Ask to initialize DB
+    const response = await askUser('Are you sure to initialize DB? (no/yes) ');
+
+    if (response.toLowerCase() !== 'yes' && response.toLowerCase() !== 'y') {
+      console.log('Process aborted!');
+      return process.exit();
+    }
+
+    await initAdvertsDB();
+
+    // close connection
+    conn.close();
+  } catch (err) {
+    console.log(`There was an error!: ${err}`);
+    process.exit(1);
+  }
+});

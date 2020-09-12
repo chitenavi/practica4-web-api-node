@@ -3,16 +3,12 @@
 /**
  * Module dependencies.
  */
+require('dotenv').config();
 
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import debugLib from 'debug';
-import http from 'http';
-import app from '../app';
-
-dotenv.config();
-
-const debug = debugLib('practica4-web-api-node:server');
+const mongoose = require('mongoose');
+const debug = require('debug')('practica4-web-api-node:server');
+const http = require('http');
+const app = require('../app');
 
 // Remote database
 /* const DB = process.env.DATABASE.replace(
@@ -21,7 +17,7 @@ const debug = debugLib('practica4-web-api-node:server');
 ); */
 
 // Local database
-const DB = process.env.DATABASE_LOCAL || 'mongodb://localhost:27017/nodepop';
+const DB = process.env.DATABASE_LOCAL;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -83,7 +79,7 @@ function onError(error) {
 }
 
 /**
- * Connect to remote database
+ * Connect to database
  */
 
 mongoose
@@ -93,7 +89,7 @@ mongoose
     useFindAndModify: false,
     useUnifiedTopology: true,
   })
-  .then(() => debug('DB connection successful!'));
+  .then(() => console.log('DB connection successful!'));
 
 /**
  * Event listener for HTTP server "listening" event.
