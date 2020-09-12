@@ -2,7 +2,7 @@ define({ "api": [
   {
     "type": "delete",
     "url": "/api/v1/adverts/:id",
-    "title": "Delete an advert",
+    "title": "5.Delete an advert",
     "name": "DeleteAdvert",
     "group": "Adverts",
     "description": "<p>Delete one advert by id param</p>",
@@ -44,7 +44,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/v1/adverts/:id",
-    "title": "Find an advert",
+    "title": "2.Find an advert",
     "name": "GetAdvert",
     "group": "Adverts",
     "description": "<p>Get one advert by id param</p>",
@@ -125,7 +125,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/v1/adverts",
-    "title": "List all adverts",
+    "title": "1.List all adverts",
     "name": "GetAllAdverts",
     "group": "Adverts",
     "description": "<p>Get all the ads, and you can filter according to the arguments described</p>",
@@ -205,7 +205,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/v1/adverts/tags/",
-    "title": "Find all exist tags",
+    "title": "6.Find all exist tags",
     "name": "GetAllTags",
     "group": "Adverts",
     "description": "<p>Get all exist tags in th DB</p>",
@@ -273,7 +273,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/api/v1/adverts/",
-    "title": "Create an advert",
+    "title": "3.Create an advert",
     "name": "PostAdvert",
     "group": "Adverts",
     "description": "<p>Create one advert, content in the body (form-data)</p>",
@@ -389,7 +389,7 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/adverts/:id",
-    "title": "Update an advert",
+    "title": "4.Update an advert",
     "name": "PutAdvert",
     "group": "Adverts",
     "description": "<p>Update one advert by id param</p>",

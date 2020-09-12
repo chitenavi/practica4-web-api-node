@@ -6,7 +6,7 @@ const Advert = require('../models/advertModel');
  */
 
 /**
- * @api {get} /api/v1/adverts List all adverts
+ * @api {get} /api/v1/adverts 1.List all adverts
  * @apiName GetAllAdverts
  * @apiGroup Adverts
  *
@@ -88,7 +88,7 @@ const getAllAdverts = async (req, res, next) => {
 };
 
 /**
- * @api {get} /api/v1/adverts/:id Find an advert
+ * @api {get} /api/v1/adverts/:id 2.Find an advert
  * @apiName GetAdvert
  * @apiGroup Adverts
  *
@@ -152,7 +152,7 @@ const getAdvertById = async (req, res, next) => {
 };
 
 /**
- * @api {post} /api/v1/adverts/ Create an advert
+ * @api {post} /api/v1/adverts/ 3.Create an advert
  * @apiName PostAdvert
  * @apiGroup Adverts
  * @apiDescription Create one advert, content in the body (form-data)
@@ -240,7 +240,7 @@ const createAdvert = async (req, res, next) => {
 };
 
 /**
- * @api {put} /api/v1/adverts/:id Update an advert
+ * @api {put} /api/v1/adverts/:id 4.Update an advert
  * @apiName PutAdvert
  * @apiGroup Adverts
  *
@@ -321,7 +321,7 @@ const updateAdvertById = async (req, res, next) => {
 };
 
 /**
- * @api {delete} /api/v1/adverts/:id Delete an advert
+ * @api {delete} /api/v1/adverts/:id 5.Delete an advert
  * @apiName DeleteAdvert
  * @apiGroup Adverts
  *
@@ -362,7 +362,7 @@ const deleteAdvertById = async (req, res, next) => {
 };
 
 /**
- * @api {get} /api/v1/adverts/tags/ Find all exist tags
+ * @api {get} /api/v1/adverts/tags/ 6.Find all exist tags
  * @apiName GetAllTags
  * @apiGroup Adverts
  *
