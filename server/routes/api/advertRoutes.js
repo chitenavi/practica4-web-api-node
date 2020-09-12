@@ -35,7 +35,7 @@ router.route('/tags').get(getAllExistTags);
 router
   .route('/:id')
   .get(getAdvertById)
-  .put(updateAdvertById)
+  .put(uploadAdvImg, advertValidationRules(), validate, updateAdvertById)
   .delete(deleteAdvertById);
 
 module.exports = router;

@@ -1,5 +1,5 @@
+const fs = require('fs');
 const Advert = require('../models/advertModel');
-const APIFeatures = require('../utils/apiFeatures');
 
 /**
  * Generate API Documentation with apidoc
@@ -7,10 +7,34 @@ const APIFeatures = require('../utils/apiFeatures');
 
 /**
  * @api {get} /api/v1/adverts List all adverts
+ * @apiName GetAllAdverts
  * @apiGroup Adverts
+ *
+ * @apiDescription Get all the ads, and you can filter according to the arguments described
+ *
+ * @apiExample Example usage:
+ * curl -i http://localhost/api/v1/adverts
+ *
+ * @apiExample Filter usage:
+ * By name:
+ * curl -i http://localhost/api/v1/adverts?name=ipho
+ * By price:
+ * curl -i http://localhost/api/v1/adverts?price=100-500
+ * By sale (on sale:true or to buy:false):
+ * curl -i http://localhost/api/v1/adverts?sale=false
+ * By tag:
+ * curl -i http://localhost/api/v1/adverts?tags=work,mobile
+ * Sort by price:
+ * curl -i http://localhost/api/v1/adverts?sort=price
+ * Limit obtained fields:
+ * curl -i http://localhost/api/v1/adverts?fields=name,price
+ * Paginate:
+ * curl -i http://localhost/api/v1/adverts?start=1&limit=4
+ *
  * @apiSuccess {String} status Status response
  * @apiSuccess {Date} requestedAt Request date/time
  * @apiSuccess {Number} results Number of adverts
+ * @apiSuccess {Object} data Data response
  * @apiSuccess {Object[]} data.adverts Adverts's list
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -46,14 +70,10 @@ const APIFeatures = require('../utils/apiFeatures');
  */
 const getAllAdverts = async (req, res, next) => {
   try {
-    const features = new APIFeatures(Advert.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const adverts = await features.query;
+    // Get adverts, apply filter, sort, limit fields or paginate if it exists
+    const adverts = await Advert.listAdverts(Advert.find(), req.query);
 
-    //console.log(adverts);
+    // console.log(adverts);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -69,10 +89,18 @@ const getAllAdverts = async (req, res, next) => {
 
 /**
  * @api {get} /api/v1/adverts/:id Find an advert
+ * @apiName GetAdvert
  * @apiGroup Adverts
+ *
+ * @apiDescription Get one advert by id param
+ *
+ * @apiExample Example usage:
+ * curl -i http://localhost/api/v1/adverts/5f59fc8f53bab60f7d995367
+ *
  * @apiParam {id} id Advert id
  * @apiSuccess {String} status Status response
  * @apiSuccess {Date} requestedAt Request date/time
+ * @apiSuccess {Object} data Data response
  * @apiSuccess {Object} data.advert Advert data
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -125,7 +153,10 @@ const getAdvertById = async (req, res, next) => {
 
 /**
  * @api {post} /api/v1/adverts/ Create an advert
+ * @apiName PostAdvert
  * @apiGroup Adverts
+ * @apiDescription Create one advert, content in the body (form-data)
+ *
  * @apiParam {file} image Advert file image (jpg/png)
  * @apiParam {String} name Advert name
  * @apiParam {Number} price Advert price
@@ -143,6 +174,7 @@ const getAdvertById = async (req, res, next) => {
  *    }
  * @apiSuccess {String} status Status response
  * @apiSuccess {Date} requestedAt Request date/time
+ * @apiSuccess {Object} data Data response
  * @apiSuccess {Object} data.advert Advert data created
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 201 OK
@@ -209,7 +241,11 @@ const createAdvert = async (req, res, next) => {
 
 /**
  * @api {put} /api/v1/adverts/:id Update an advert
+ * @apiName PutAdvert
  * @apiGroup Adverts
+ *
+ * @apiDescription Update one advert by id param
+ *
  * @apiParam {id} id Advert id
  * @apiParam {String} name Advert name
  * @apiParam {Number} price Advert price
@@ -220,6 +256,7 @@ const createAdvert = async (req, res, next) => {
  *    }
  * @apiSuccess {String} status Status response
  * @apiSuccess {Date} requestedAt Request date/time
+ * @apiSuccess {Object} data Data response
  * @apiSuccess {Object} data.advert Advert data updated
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK
@@ -256,7 +293,16 @@ const createAdvert = async (req, res, next) => {
 
 const updateAdvertById = async (req, res, next) => {
   try {
-    const advert = await Advert.findByIdAndUpdate(req.params.id, req.body, {
+    // If there is a new image, delete the previous one
+    if (req.file) {
+      const adv = await Advert.findById(req.params.id);
+      fs.unlinkSync(`public/img/adverts/${adv.image}`);
+
+      req.body.image = req.file.filename;
+    }
+
+    // Update the advert
+    const advertUpd = await Advert.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -265,7 +311,7 @@ const updateAdvertById = async (req, res, next) => {
       status: 'success',
       requestedAt: req.requestTime,
       data: {
-        advert,
+        advert: advertUpd,
       },
     });
   } catch (err) {
@@ -276,7 +322,11 @@ const updateAdvertById = async (req, res, next) => {
 
 /**
  * @api {delete} /api/v1/adverts/:id Delete an advert
+ * @apiName DeleteAdvert
  * @apiGroup Adverts
+ *
+ * @apiDescription Delete one advert by id param
+ *
  * @apiParam {id} id Advert id
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 204 No Content
@@ -291,6 +341,14 @@ const updateAdvertById = async (req, res, next) => {
 
 const deleteAdvertById = async (req, res, next) => {
   try {
+    // First, check if there is an image and delete it
+    const advert = await Advert.findById(req.params.id);
+
+    if (advert) {
+      fs.unlinkSync(`public/img/adverts/${advert.image}`);
+    }
+
+    // Second, delete advert from DB
     await Advert.findByIdAndRemove(req.params.id);
 
     res.status(204).json({
@@ -305,9 +363,17 @@ const deleteAdvertById = async (req, res, next) => {
 
 /**
  * @api {get} /api/v1/adverts/tags/ Find all exist tags
+ * @apiName GetAllTags
  * @apiGroup Adverts
+ *
+ * @apiDescription Get all exist tags in th DB
+ *
+ * @apiExample Example usage:
+ * curl -i http://localhost/api/v1/adverts/tags
+ *
  * @apiSuccess {String} status Status response
  * @apiSuccess {Date} requestedAt Request date/time
+ * @apiSuccess {Object} data Data response
  * @apiSuccess {String[]} data.tags Adverts tags list in DB
  * @apiSuccessExample {json} Success
  *    HTTP/1.1 200 OK

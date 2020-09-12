@@ -1,15 +1,9 @@
 const Advert = require('../models/advertModel');
-const APIFeatures = require('../utils/apiFeatures');
 
 const getHomePage = async (req, res, next) => {
   try {
     // GET all adverts, apply the received query string if it exists
-    const features = new APIFeatures(Advert.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const adverts = await features.query;
+    const adverts = await Advert.listAdverts(Advert.find(), req.query);
 
     // Render home page with the obtained adverts
     res.render('index', { title: 'Nodepop', adverts });

@@ -49,11 +49,14 @@ class APIFeatures {
       filterObj.name = { $regex: `^${filterObj.name}`, $options: 'i' };
     }
 
-    // If there is a "tag" in queryString (?tag=mobile),
-    // replace it with tags (?tags=mobile) to match with model
-    if (filterObj.tag) {
-      filterObj.tags = filterObj.tag;
-      delete filterObj.tag;
+    // If there are "tags" in queryString (?tags=mobile,work),
+    // make new valid mongodb search object, tags = { $all: ['mobile','work'] }
+    if (filterObj.tags) {
+      if (filterObj.tags === 'all') {
+        delete filterObj.tags;
+      } else {
+        filterObj.tags = { $all: filterObj.tags.split(',') };
+      }
     }
 
     this.query = this.query.find(filterObj);
@@ -63,7 +66,7 @@ class APIFeatures {
 
   sort() {
     if (this.queryString.sort) {
-      // Order by one ore more keys separated by commas,
+      // Order by one or more keys separated by commas,
       // replace commas with spaces, sort('name price')
       const sortBy = this.queryString.sort.split(',').join(' ');
 
